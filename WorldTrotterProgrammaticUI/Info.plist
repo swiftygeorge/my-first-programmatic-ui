@@ -19,5 +19,7 @@
 			</array>
 		</dict>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow access to your location so the app can display your current location in the Map tab.</string>
 </dict>
 </plist>

@@ -8,9 +8,10 @@
 import UIKit
 import MapKit
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MKMapViewDelegate {
     
     var mapView: MKMapView!
+    var locationManager: CLLocationManager!
     var selectedSegmentIndex = 0
     
     override func loadView() {
@@ -21,6 +22,8 @@ class MapViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        locationManager = CLLocationManager()
+        mapView.showsUserLocation = true
         
         // MARK: - Create subviews
         
@@ -42,6 +45,18 @@ class MapViewController: UIViewController {
             segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
         
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        locationManager.requestWhenInUseAuthorization()
+        if let userLocation = locationManager.location {
+            mapView.setRegion(MKCoordinateRegion(center: userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: 2.5, longitudeDelta: 2.5)), animated: true)
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        mapView.setRegion(MKCoordinateRegion(center: userLocation.coordinate, latitudinalMeters: 2.5, longitudinalMeters: 2.5), animated: true)
     }
     
     @objc func chooseMapVersion(_ sender: UISegmentedControl) {
